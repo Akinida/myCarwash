@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Booking Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Colors from your palette */
+        :root {
+            --primary-color: #4CAF50; /* Change to your primary color */
+            --secondary-color: #FFC107; /* Change to your secondary color */
+            --background-color: #F5F5F5; /* Light background */
+            --text-color: #333; /* Dark text */
+            --button-color: #FF5722; /* Accent color for buttons */
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* Navbar customization */
+        .navbar {
+            background-color: var(--primary-color);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #fff !important;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--primary-color);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background-color: var(--button-color);
+            border-color: var(--button-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        /* Form Styling */
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-select, .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: none;
+        }
+
+        /* Back Button */
+        .btn-secondary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Shine Pro Car Wash</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{%url 'customerMain' user_id %}">Homepage</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <!-- Booking Form Section -->
+    <section id="booking" class="container mt-5">
+        <h2 class="text-center mb-4">Book Your Slot</h2>
+        <!-- Back Button -->
+        <div class="container mt-3 text-center" >
+            <button class="btn btn-secondary" onclick="history.back()">Back</button>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <form action="{% url 'edit_booking' booking.booking_id %}" method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Vehicle Type -->
+                    <div class="mb-3">
+                        <label for="vehicle_type" class="form-label">Select Your Vehicle Type</label>
+                        <select name="vehicle_type" id="vehicle_type" class="form-select" required>
+                            <option value="MPV">MPV</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Sedan">Sedan</option>
+                        </select>
+                    </div>
+
+                    <!-- Car Plate -->
+                    <div class="mb-3">
+                        <label for="car_plate" class="form-label">Car Plate No</label>
+                        <input type="text" value="{{booking.no_plate}}" name="car_plate" id="car_plate" class="form-control" required>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label">Phone Number</label>
+                        <input type="text" name="phone_number" value="{{booking.no_phone}}" id="phone_number" class="form-control" required>
+                    </div>
+
+                    <!-- Slot Selection -->
+                    <div class="mb-3">
+                        <label for="slot" class="form-label">Choose Slot</label>
+                        <select name="slot" id="slot" class="form-select" required>
+                            <option value="9:00 AM" {% if booking.slot == '9:00 AM' %}selected{% endif %}>9:00 AM</option>
+                            <option value="10:00 AM" {% if booking.slot == '10:00 AM' %}selected{% endif %}>10:00 AM</option>
+                            <option value="11:00 AM" {% if booking.slot == '11:00 AM' %}selected{% endif %}>11:00 AM</option>
+                            <option value="12:00 PM" {% if booking.slot == '12:00 PM' %}selected{% endif %}>12:00 PM</option>
+                            <option value="1:00 PM" {% if booking.slot == '1:00 PM' %}selected{% endif %}>1:00 PM</option>
+                            <option value="2:00 PM" {% if booking.slot == '2:00 PM' %}selected{% endif %}>2:00 PM</option>
+                            <option value="3:00 PM" {% if booking.slot == '3:00 PM' %}selected{% endif %}>3:00 PM</option>
+                            <option value="4:00 PM" {% if booking.slot == '4:00 PM' %}selected{% endif %}>4:00 PM</option>
+                            <option value="5:00 PM" {% if booking.slot == '5:00 PM' %}selected{% endif %}>5:00 PM</option>
+                        </select>
+                    </div>
+
+                    <!-- Service Package Selection -->
+                    <div class="mb-3">
+                        <label for="service_package" class="form-label">Select Service Package</label>
+                        <select name="service_package" id="service_package" class="form-select" required>
+                            {% for service in AllServices %}
+                                <option value="{{ service.service_id }}" {% if booking.service.service_id == service.service_id %}selected{% endif %}>
+                                     {{ service.service_name }} - RM {{ service.price }}
+                                </option>
+                            {% endfor %}    
+                        </select>
+                    </div>
+
+                    <!-- Confirm Booking Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Saves Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Main Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+        }
+        .navbar {
+            background-color: #4CAF50; /* Dark background for navbar */
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff; /* White color for links */
+        }
+        .navbar-brand:hover, .nav-link:hover {
+            color: #0d6efd; /* Highlight color on hover */
+        }
+        h1 {
+            color: #4CAF50; /* Main color for headings */
+        }
+        .card {
+            border-radius: 10px; /* Rounded corners for the card */
+            margin-bottom: 20px; /* Space between cards */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+        .btn-primary {
+            background-color: #FF5722; /* Main color for buttons */
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        .btn-warning {
+            background-color: #FF5722; /* Warning button color */
+            border: none;
+        }
+        .btn-warning:hover {
+            background-color: #e0a800; /* Darker shade on hover */
+        }
+        .table {
+            border-radius: 10px; /* Rounded corners for the table */
+            overflow: hidden; /* To keep the corners rounded */
+        }
+        .table th {
+            background-color: #4CAF50; /* Header background color */
+            color: white; /* White text for headers */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Shine Pro Car Wash</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Homepage</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'update_service' userDetails.user_id %}">Services</a>
+                    </li>
+                    
+                </ul>
+                <a class="btn btn-outline-light" href="{% url 'logout'%}" type="button">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="animate__animated animate__bounce mt-0 text-center">Welcome back, Staff {{userDetails.user_name}}</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Manage Services</h2>
+                        <a href="{% url 'update_service' userDetails.user_id %}" class="btn btn-primary mb-3">Update Services</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Update Slot</h2>
+                        <a href="{% url 'update_slot' userDetails.user_id %}" class="btn btn-primary mb-3">Update Slot</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Customer Bookings</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Service</th>
+                                    <th>Slot</th>
+                                    <th>No Plate</th>
+                                    <th>Vehicle Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in allBooking %}
+                                <tr>
+                                    <td>{{ booking.booking_id }}</td>
+                                    {% for service in Allservices %}
+                                    {% if service.service_id == booking.service_id %}
+                                    <td>{{ service.service_name }}</td>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <td>{{ booking.slot }}</td>
+                                    <td>{{ booking.no_plate }}</td>
+                                    <td>{{ booking.vehicle_type }}</td>
+                                    <td><a href="{% url 'approve_booking' user_id booking.booking_id %}" class="btn btn-warning btn-sm">Done</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Example customer bookings list -->
+                <!-- <ul class="list-group mt-3">
+                    {% for booking in allBooking %}
+                    <li class="list-group-item">{{booking}}</li>
+                    {% endfor %}
+                </ul> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
